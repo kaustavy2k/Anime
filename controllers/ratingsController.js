@@ -29,7 +29,6 @@ exports.getRating = async (req, res) => {
 exports.getAllRatings = async (req, res) => {
   try {
     const rating = await ratings.find({ id: req.params.id });
-    console.log(rating);
     if (rating.length !== 0) {
       res.status(200).json({
         message: "All ratings",
@@ -57,9 +56,7 @@ exports.updateRating = async (req, res) => {
       id: req.params.id,
     });
     let rate;
-    //console.log("rating", rating);
     if (rating.length) {
-      console.log("if", req.body.Avgrating);
       rate = await ratings.updateOne(
         { email: req.user.email },
         {
@@ -71,7 +68,6 @@ exports.updateRating = async (req, res) => {
         }
       );
     } else {
-      console.log("else", req.body.Avgrating);
 
       rate = await ratings.create({
         email: req.user.email,
@@ -102,16 +98,13 @@ exports.mapAllRatings = async (req, res) => {
     console.log(ids.length);
     let obj = {};
     for (let i = 0; i < ids.length; i++) {
-      //console.log(ids[i]);
       const rating = await ratings.find({ id: ids[i] });
       if (rating.length) {
-        //console.log(rating[0].Avgrating);
         if (rating[0].Avgrating) {
           obj[ids[i]] = rating[0].Avgrating;
         }
       }
     }
-    console.log("obj", obj);
     res.status(200).json({
       message: "All ratings",
       rating: obj,
