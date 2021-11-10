@@ -1,0 +1,24 @@
+h3 {
+  padding-top: 5px;
+  font-size: 13px;
+}
+.listings {
+  margin-top: 10px;
+  overflow: scroll;
+  width: 100%;
+  max-width: 90%;
+  height: 600px;
+}
+.list {
+  cursor: pointer;
+  background-color: white;
+  margin-top: 10px;
+  width: 100%;
+}
+.linkstyle {
+  all: unset;
+  width: 100%;
+}
+.linkstyle:hover {
+  all: unset;
+}

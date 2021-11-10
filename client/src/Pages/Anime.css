@@ -1,0 +1,13 @@
+.rating {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  z-index: 1;
+}
+.reviews{
+    margin-bottom: 30px;
+    margin-left: 10px;
+}
