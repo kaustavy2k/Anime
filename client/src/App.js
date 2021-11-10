@@ -10,6 +10,7 @@ function App() {
     const isAuthenticated = localStorage.getItem("isAuthenticated");
     return isAuthenticated ? Component : <Navigate to="/login" />;
   }
+  console.log(process.env);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <BrowserRouter>

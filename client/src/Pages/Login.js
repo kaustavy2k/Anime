@@ -17,6 +17,7 @@ function Login() {
       password: password,
     };
     setloading(true);
+    console.log(process.env.REACT_APP_API_URL)
     axios
       .post(`${process.env.REACT_APP_API_URL}/login`, data, {
         withCredentials: true,
