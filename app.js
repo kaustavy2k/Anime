@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.use("/", routes);
 app.use(express.static(__dirname + "/client/build"));
+const path = require("path");
 app.get("*", (req, res) => {
   res.status(200).sendFile("index.html", { root: __dirname });
 });

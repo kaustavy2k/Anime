@@ -10,13 +10,12 @@ function Anime(props) {
   const params = useParams();
   const [data, setdata] = useState({});
   const [rating, setrating] = useState("");
-  const [avgrating, setavgrating] = useState("");
+  const [avgrating, setavgrating] = useState(null);
   const [description, setdescription] = useState("");
   const [loading, setloading] = useState(false);
   const [all, setall] = useState([]);
 
   useEffect(() => {
-    let description, rating, avgrating;
     setloading(true);
     axios
       .get(`https://api.aniapi.com/v1/anime/${params.id}`)
@@ -30,9 +29,12 @@ function Anime(props) {
         );
       })
       .then((res) => {
-        description = res.data.rating[0].description;
-        rating = res.data.rating[0].rating;
-        avgrating = res.data.rating[0].Avgrating;
+        if (res.data.rating.length) {
+          setdescription(res.data.rating[0].description);
+          setrating(res.data.rating[0].rating);
+        }
+        setavgrating(res.data.avg);
+
         return axios.get(
           `${process.env.REACT_APP_API_URL}/all-ratings/${params.id}`,
           {
@@ -42,9 +44,6 @@ function Anime(props) {
       })
       .then((res) => {
         setall(res.data.rating);
-        setdescription(description);
-        setrating(rating);
-        setavgrating(avgrating);
         setloading(false);
       })
       .catch((err) => {
@@ -72,9 +71,12 @@ function Anime(props) {
         );
       })
       .then((res) => {
-        setavgrating(res.data.rating[0].Avgrating);
-        setdescription(res.data.rating[0].description);
-        setrating(res.data.rating[0].rating);
+        if (res.data.rating.length) {
+          setdescription(res.data.rating[0].description);
+          setrating(res.data.rating[0].rating);
+        }
+        setavgrating(res.data.avg);
+
         return axios.get(
           `${process.env.REACT_APP_API_URL}/all-ratings/${params.id}`,
           {
@@ -97,26 +99,21 @@ function Anime(props) {
     setdescription(e.target.value);
   };
   let calculaterating = () => {
-    if (all.length > 1) {
+    if (all.length) {
       let sum = 0;
       let count = 0;
-      all.map((item) => {
-        console.log(item.email);
-        console.log(JSON.parse(localStorage.getItem("isAuthenticated")).email);
-
+      all.forEach((item) => {
         if (
           item.email !=
           JSON.parse(localStorage.getItem("isAuthenticated")).email
         ) {
           sum += item.rating;
-        }
-        count += 1;
+          count += 1;
+        }  
       });
-      console.log("sum", sum, count);
       sum = sum + rating;
-      console.log("sum", sum, count);
-
-      return sum / count;
+      let avg = sum / (count + 1);
+      return avg;
     } else {
       return rating;
     }

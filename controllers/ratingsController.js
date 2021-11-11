@@ -1,21 +1,27 @@
 const ratings = require("../models/ratings");
-const { use } = require("../routes/routes");
 exports.getRating = async (req, res) => {
   try {
     const rating = await ratings.find({
       email: req.user.email,
       id: req.params.id,
     });
+    const ratingavg = await ratings.find({
+      id: req.params.id,
+    });
+    console.log(ratingavg);
+    let avg = ratingavg[0].Avgrating;
     if (rating.length !== 0) {
       res.status(200).json({
         message: "your rating",
         rating,
+        avg,
       });
     } else {
       res.status(200).json({
         message: "your rating",
         rating: [],
         msg: "No ratings Available",
+        avg,
       });
     }
   } catch (err) {
@@ -68,7 +74,6 @@ exports.updateRating = async (req, res) => {
         }
       );
     } else {
-
       rate = await ratings.create({
         email: req.user.email,
         id: req.params.id,
@@ -77,6 +82,14 @@ exports.updateRating = async (req, res) => {
         Avgrating: req.body.Avgrating,
       });
     }
+    await ratings.updateOne(
+      { id: req.params.id },
+      {
+        $set: {
+          Avgrating: req.body.Avgrating,
+        },
+      }
+    );
     res.status(200).json({
       status: "success",
       data: {
